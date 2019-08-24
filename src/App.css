@@ -7,6 +7,15 @@ body {
   color: white;
 }
 
+.containerCenter{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+}
+
 .app {
   align-items: center;
   justify-content: center;
