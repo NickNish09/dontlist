@@ -10,6 +10,7 @@ function Todo() {
       isCompleted: false,
     },
   ]);
+  const [focused, setFocused] = useState("");
   const db = firebase.firestore();
   const dbRef = db.collection(`${window.location.pathname}`);
 
@@ -27,6 +28,31 @@ function Todo() {
       console.log("Error getting collection:", error);
     });
   },[]);
+
+  function updateDataBase(newTodos) {
+    newTodos.map((todo) => {
+      if(todo.content === ""){
+        return;
+      }
+      return dbRef.doc(todo.content).set(
+        {
+          content: todo.content,
+          isCompleted: todo.isCompleted
+        }
+      );
+    });
+  }
+
+  function updateDoc(doc, value) {
+    console.log(doc);
+    console.log(value);
+    if(doc !== "" && doc !== value){
+      dbRef.doc(value).set({
+        content: value,
+        isCompleted: false
+      }).then(() => dbRef.doc(doc).delete())
+    }
+  }
 
   function handleKeyDown(e, i) {
     if (e.key === 'Enter') {
@@ -48,22 +74,7 @@ function Todo() {
     setTimeout(() => {
       document.forms[0].elements[i + 1].focus();
     }, 0);
-
     updateDataBase(newTodos);
-  }
-
-  function updateDataBase(newTodos) {
-    newTodos.map((todo) => {
-      if(todo.content === ""){
-        return;
-      }
-      return dbRef.doc(todo.content).set(
-        {
-          content: todo.content,
-          isCompleted: todo.isCompleted
-        }
-      );
-    });
   }
 
   function updateTodoAtIndex(e, i) {
@@ -73,10 +84,23 @@ function Todo() {
   }
 
   function removeTodoAtIndex(i) {
+    // dbRef.get().then(function(querySnapshot) {
+    //   querySnapshot.forEach(function(doc) {
+    //     doc.ref.delete().then(
+    //       () => updateDataBase(todos)
+    //     )
+    //   });
+    // });
+    if(focused !== ""){
+      dbRef.doc(focused).delete();
+    }
+    console.log(focused);
     if (i === 0 && todos.length === 1) return;
     setTodos(todos => todos.slice(0, i).concat(todos.slice(i + 1, todos.length)));
     setTimeout(() => {
-      document.forms[0].elements[i - 1].focus();
+      if(document.forms[0].elements[i - 1] !== undefined){
+        document.forms[0].elements[i - 1].focus();
+      }
     }, 0);
   }
 
@@ -104,6 +128,8 @@ function Todo() {
                 value={todo.content}
                 onKeyDown={e => handleKeyDown(e, i)}
                 onChange={e => updateTodoAtIndex(e, i)}
+                onFocus={() => setFocused(todo.content)}
+                onBlur={() => updateDoc(focused, todo.content)}
               />
             </div>
           ))}
