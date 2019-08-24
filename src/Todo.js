@@ -12,7 +12,11 @@ function Todo() {
   ]);
   const [focused, setFocused] = useState("");
   const db = firebase.firestore();
-  const dbRef = db.collection(`${window.location.pathname}`);
+  const dbRef = db.collection(`${normalizeUrl(window.location.pathname)}`);
+
+  function normalizeUrl(path){
+    return path.split('/').join(':*:')
+  }
 
   useEffect(()=> {
 
