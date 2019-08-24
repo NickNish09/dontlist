@@ -10,7 +10,7 @@ function Home() {
   return(
     <div className={'containerCenter'}>
       <div style={{display: 'flex'}}>
-        <h1 className={'text-white'} style={{fontWeight: 400}}>dontlist.com/</h1>
+        <h1 className={'text-white'} style={{fontWeight: 400}}>dontlist.tk/</h1>
         <input type="text" style={{width: 200, fontSize: 30, fontWeight: 600}} autoFocus={true}
                onKeyDown={e => handleKeyDown(e)}
         />
