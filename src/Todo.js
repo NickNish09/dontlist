@@ -46,7 +46,7 @@ function Todo() {
   function updateDoc(doc, value) {
     console.log(doc);
     console.log(value);
-    if(doc !== "" && doc !== value){
+    if(doc !== "" && doc !== value && value !== ""){
       dbRef.doc(value).set({
         content: value,
         isCompleted: false
