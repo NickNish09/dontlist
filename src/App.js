@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import firestore from "./Firestore";
+import * as firebase from "firebase";
 
 function App() {
   const [todos, setTodos] = useState([
@@ -8,6 +10,19 @@ function App() {
       isCompleted: false,
     },
   ]);
+  const db = firebase.firestore();
+  const dbRef = db.collection(`${window.location.pathname}`);
+
+  useEffect(()=> {
+
+    dbRef.get().then(function(collection) {
+      let t = collection.docs.map(doc => doc.data())
+      // console.log(t);
+      setTodos(t);
+    }).catch(function(error) {
+      console.log("Error getting collection:", error);
+    });
+  },[]);
 
   function handleKeyDown(e, i) {
     if (e.key === 'Enter') {
@@ -29,6 +44,22 @@ function App() {
     setTimeout(() => {
       document.forms[0].elements[i + 1].focus();
     }, 0);
+
+    updateDataBase(newTodos);
+  }
+
+  function updateDataBase(newTodos) {
+    newTodos.map((todo) => {
+      if(todo.content === ""){
+        return;
+      }
+      return dbRef.doc(todo.content).set(
+        {
+          content: todo.content,
+          isCompleted: todo.isCompleted
+        }
+      );
+    });
   }
 
   function updateTodoAtIndex(e, i) {
@@ -49,6 +80,7 @@ function App() {
     const temporaryTodos = [...todos];
     temporaryTodos[index].isCompleted = !temporaryTodos[index].isCompleted;
     setTodos(temporaryTodos);
+    updateDataBase(temporaryTodos);
   }
 
   return (
@@ -73,6 +105,7 @@ function App() {
           ))}
         </ul>
       </form>
+
     </div>
   );
 }
