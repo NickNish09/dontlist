@@ -3,8 +3,14 @@ body {
   min-height: 100vh;
 }
 
+.text-white{
+  color: white;
+}
+
 .app {
-  padding-top: 10rem;
+  align-items: center;
+  justify-content: center;
+  padding-left: 2em;
 }
 
 .header {
@@ -22,9 +28,7 @@ body {
 
 .todo-list {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
   color: white;
 }
 

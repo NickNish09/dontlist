@@ -4,17 +4,9 @@ import './App.css';
 function App() {
   const [todos, setTodos] = useState([
     {
-      content: `${window.location.pathname}`,
-      isCompleted: true,
+      content: '',
+      isCompleted: false,
     },
-    // {
-    //   content: 'Get haircut',
-    //   isCompleted: false,
-    // },
-    // {
-    //   content: 'Build a todo app in React',
-    //   isCompleted: false,
-    // }
   ]);
 
   function handleKeyDown(e, i) {
@@ -61,6 +53,7 @@ function App() {
 
   return (
     <div className="app">
+      <h1 className={'text-white'}>{window.location.pathname}</h1>
       <form className="todo-list">
         <ul>
           {todos.map((todo, i) => (
