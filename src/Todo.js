@@ -16,16 +16,25 @@ function Todo() {
 
   useEffect(()=> {
 
-    dbRef.get().then(function(collection) {
-      let t = collection.docs.map(doc => doc.data());
+    // dbRef.get().then(function(collection) {
+    //   let t = collection.docs.map(doc => doc.data());
+    //   t.push({
+    //     content: '',
+    //     isCompleted: false,
+    //   });
+    //   // console.log(t);
+    //   setTodos(t);
+    // }).catch(function(error) {
+    //   console.log("Error getting collection:", error);
+    // });
+    dbRef.onSnapshot(function(querySnapshot) {
+      let t = querySnapshot.docs.map(doc => doc.data());
       t.push({
         content: '',
         isCompleted: false,
       });
-      // console.log(t);
+      console.log(t);
       setTodos(t);
-    }).catch(function(error) {
-      console.log("Error getting collection:", error);
     });
   },[]);
 
