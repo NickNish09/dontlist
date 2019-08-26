@@ -128,7 +128,7 @@ function Todo() {
     <div className="app">
       <h1 className={'text-white'}>{window.location.pathname}</h1>
       <form className="todo-list">
-        <ul>
+        <ul style={{width: '80%'}}>
           {todos.map((todo, i) => (
             <div className={`todo ${todo.isCompleted && 'todo-is-completed'}`}>
               <div className={'checkbox'} onClick={() => toggleTodoCompleteAtIndex(i)}>
@@ -143,6 +143,7 @@ function Todo() {
                 onChange={e => updateTodoAtIndex(e, i)}
                 onFocus={() => setFocused(todo.content)}
                 onBlur={() => updateDoc(focused, todo.content)}
+                style={{width: '100%'}}
               />
             </div>
           ))}
