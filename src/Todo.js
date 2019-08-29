@@ -30,30 +30,38 @@ function Todo() {
     });
   },[]);
 
-  function updateDataBase(newTodos) {
+  function updateDataBase(newTodos, isSetDone) {
     let timestamp = new Date().getTime();
     console.log(timestamp);
     newTodos.map((todo) => {
-      if(todo.content === "" || todo.timestamp !== undefined){
+      if((todo.content === "" || todo.timestamp !== undefined) && !isSetDone){
         return;
-      }
-      return dbRef.doc(todo.content).set(
-        {
-          content: todo.content,
-          isCompleted: todo.isCompleted,
-          timestamp: timestamp
+      } else {
+        if(todo.timestamp !== undefined){
+          timestamp = todo.timestamp;
         }
-      );
+       if(todo.content !== ""){
+         return dbRef.doc(todo.content).set(
+           {
+             content: todo.content,
+             isCompleted: todo.isCompleted,
+             timestamp: timestamp
+           }
+         );
+       }
+      }
     });
   }
 
   function updateDoc(doc, value) {
+    let timestamp = new Date().getTime();
     console.log(doc);
     console.log(value);
     if(doc !== "" && doc !== value && value !== ""){
       dbRef.doc(value).set({
         content: value,
-        isCompleted: false
+        isCompleted: false,
+        timestamp: timestamp
       }).then(() => dbRef.doc(doc).delete())
     }
   }
@@ -78,7 +86,7 @@ function Todo() {
     setTimeout(() => {
       document.forms[0].elements[i + 1].focus();
     }, 0);
-    updateDataBase(newTodos);
+    updateDataBase(newTodos, false);
   }
 
   function updateTodoAtIndex(e, i) {
@@ -112,7 +120,8 @@ function Todo() {
     const temporaryTodos = [...todos];
     temporaryTodos[index].isCompleted = !temporaryTodos[index].isCompleted;
     setTodos(temporaryTodos);
-    updateDataBase(temporaryTodos);
+    console.log(temporaryTodos);
+    updateDataBase(temporaryTodos, true);
   }
 
   return (
