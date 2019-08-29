@@ -43,14 +43,17 @@ function Todo() {
   },[]);
 
   function updateDataBase(newTodos) {
+    let timestamp = new Date().getTime();
+    console.log(timestamp);
     newTodos.map((todo) => {
-      if(todo.content === ""){
+      if(todo.content === "" || todo.timestamp !== undefined){
         return;
       }
       return dbRef.doc(todo.content).set(
         {
           content: todo.content,
-          isCompleted: todo.isCompleted
+          isCompleted: todo.isCompleted,
+          timestamp: timestamp
         }
       );
     });
